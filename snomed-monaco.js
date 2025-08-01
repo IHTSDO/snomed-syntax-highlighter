@@ -73,6 +73,38 @@ require(['vs/editor/editor.main'], function() {
         }
     });
     
+    // SNOMED CT link provider
+    monaco.languages.registerLinkProvider('snomedct', {
+        provideLinks: function(model, token) {
+            const links = [];
+            const text = model.getValue();
+            
+            // Smart regex that matches both standalone concept codes and codes with descriptions
+            // Pattern: \b(\d{6,18})\b(?:\s*\|([^|]*)\|)?
+            // This matches: 123456789 or 123456789 |description|
+            const conceptRegex = /\b(\d{6,18})\b(?:\s*\|([^|]*)\|)?/g;
+            let match;
+            
+            while ((match = conceptRegex.exec(text)) !== null) {
+                const conceptId = match[1];
+                const description = match[2] ? match[2].trim() : '';
+                const fullMatch = match[0];
+                const startPos = model.getPositionAt(match.index);
+                const endPos = model.getPositionAt(match.index + fullMatch.length);
+                
+                // Create URL with concept ID
+                let url = `http://snomed.info/id/${conceptId}`;
+                
+                links.push({
+                    range: new monaco.Range(startPos.lineNumber, startPos.column, endPos.lineNumber, endPos.column),
+                    url: url
+                });
+            }
+            
+            return { links: links };
+        }
+    });
+    
     // Initialize editor
     let editor;
     
@@ -104,6 +136,7 @@ require(['vs/editor/editor.main'], function() {
                 lineHeight: 20,
                 wordWrap: 'on',
                 padding: { top: 0, bottom: 5, left: 0, right: 0 },
+                links: true
             });
             
             // Adjust height based on content
