@@ -1,30 +1,31 @@
 # SNOMED CT Expression Syntax Highlighter
 
-A single-page web application for formatting and syntax highlighting SNOMED CT expressions using [Prism.js](https://prismjs.com/). This webapp is designed to be embedded in other applications and provides a clean, white background with no layout styling.
+A single-page web application for formatting and syntax highlighting SNOMED CT expressions using [Monaco Editor](https://microsoft.github.io/monaco-editor/). This webapp is designed to be embedded in other applications and provides a clean, white background with no layout styling.
 
 ## Features
 
-- **Robust Syntax Highlighting**: Uses Prism.js for reliable parsing and highlighting
+- **Professional Syntax Highlighting**: Uses Monaco Editor (same as VS Code) for robust parsing and highlighting
 - **Custom Language Definition**: Tailored specifically for SNOMED CT expressions
 - **Automatic Normalization**: Cleans up spacing around description terms
 - **Indentation Formatting**: Formats attribute groups with proper indentation
 - **Nested Expression Support**: Handles complex nested structures with proper indentation
 - **URL Parameter Support**: Accepts expressions via URL parameter
 - **Embeddable**: Designed to be embedded in other applications
-- **Lightweight**: Uses Prism.js core (2KB) with custom language definition
+- **Lightweight**: Uses Monaco Editor with custom language definition
 - **Clean Design**: White background with minimal styling
 
 ## Syntax Highlighting
 
 The webapp highlights the following SNOMED CT expression components:
 
-- **Concept IDs**: 9-digit numerical sequences (e.g., `243796009`) - Blue
-- **Descriptions**: Text enclosed by vertical bars (e.g., `| Situation with explicit context |`) - Black
-- **Operators**: `:`, `=`, `<`, `<<`, `>>` - Red
-- **Brackets**: `{}`, `[]`, `()` - Gray
-- **Keywords**: `+id` - Green
-- **Role Group Identifiers**: `@Finding`, `@Relationship` - Purple
-- **Separators**: Commas - Gray
+- **Concept IDs**: 9-digit numerical sequences (e.g., `243796009`) - Grey
+- **Pipes**: Vertical bars (`|`) - Blue
+- **Keywords**: `id` - Red, bold
+- **Operators**: `:`, `=`, `<`, `<<`, `>>` - Red, bold
+- **Brackets**: `{}`, `[]`, `()` - Red, bold
+- **Role Group Identifiers**: `@Finding`, `@Relationship` - Red, bold
+- **Separators**: Commas - Red, bold
+- **Descriptions**: Text between pipes - Black
 
 ## Normalization
 
@@ -77,16 +78,17 @@ The formatter handles complex nested expressions with proper indentation at each
 
 **Parentheses Formatting:**
 - Adds a newline after opening parentheses `(`
-- Indents the following line by 13 spaces
+- Indents the following line by 4 spaces
 - Maintains proper structure for nested expressions
 
-## Benefits of Using Prism.js
+## Benefits of Using Monaco Editor
 
-- **Robust Parsing**: Handles edge cases better than regex-based solutions
-- **Extensible**: Easy to add new token types or modify existing ones
-- **Well-Tested**: Used by millions of websites including MDN, CSS-Tricks, and more
-- **Performance**: Optimized for speed with Web Worker support
-- **Maintainable**: Clear separation of concerns with dedicated language definition
+- **Professional Parsing**: Robust tokenization and syntax highlighting
+- **Maintainable**: Clear grammar definition and token rules
+- **Extensible**: Easy to add validation and new features
+- **Performance**: Optimized for large expressions
+- **Reliable**: No more brittle regex-based parsing
+- **Professional**: Same editor used by VS Code
 
 ## Usage
 
@@ -108,7 +110,7 @@ index.html?expression=243796009 | Situation with explicit context | : { 24609000
 
 To embed this webapp in another application:
 
-1. Host the files (`index.html`, `snomed-highlighter.js`, `snomed-ct-language.js`) on your web server
+1. Host the files (`index.html`, `snomed-monaco.js`) on your web server
 2. Use an iframe or redirect to the webapp with the expression parameter
 3. The webapp will display the formatted expression with syntax highlighting
 
@@ -118,39 +120,29 @@ If your SNOMED CT expression contains special characters, make sure to URL-encod
 
 ## Files
 
-- `index.html` - Main HTML file with Prism.js integration and styling
-- `snomed-highlighter.js` - Main JavaScript logic using Prism.js with normalization, indentation, and nested expression support
-- `snomed-ct-language.js` - Custom Prism.js language definition for SNOMED CT
+- `index.html` - Main HTML file with Monaco Editor integration
+- `snomed-monaco.js` - Monaco Editor implementation with SNOMED CT language definition
 - `test.html` - Test page with example expressions
 - `README.md` - This documentation
 
 ## Custom Language Definition
 
-The `snomed-ct-language.js` file contains a custom Prism.js language definition that:
+The `snomed-monaco.js` file contains a custom Monaco Editor language definition that:
 
 - Defines token patterns for each SNOMED CT component
-- Uses regex patterns with proper precedence ordering
-- Provides semantic aliases for consistent styling
+- Uses proper token precedence for accurate highlighting
+- Provides semantic token classification
 - Can be easily extended for additional syntax elements
 
-## Normalization and Formatting Functions
+## Monaco Editor Features
 
-The `snomed-highlighter.js` file contains several functions:
+The implementation includes:
 
-- `normalizeSNOMEDExpression()` - Main normalization function
-- `formatAttributeGroups()` - Handles indentation for attribute groups
-- `formatNestedExpression()` - Recursively formats nested expressions
-- `formatAttributeGroupContent()` - Formats content within attribute groups
-- `splitByTopLevelCommas()` - Splits by commas not inside parentheses/braces
-- `formatAttribute()` - Formats individual attributes
-
-These functions:
-- Remove extra spaces around description terms
-- Format attribute groups with proper indentation
-- Handle nested expressions with recursive formatting
-- Clean up spacing around operators (=, :)
-- Handle multiple attribute groups separated by commas
-- Maintain proper indentation for each nesting level
+- **Custom Language Registration** - SNOMED CT language definition
+- **Syntax Highlighting** - Professional tokenization and coloring
+- **Custom Theme** - Tailored color scheme for SNOMED CT
+- **Document Formatting** - Automatic formatting and indentation
+- **Read-only Mode** - Optimized for display purposes
 
 ## Testing
 
@@ -160,23 +152,28 @@ Open `test.html` in a web browser to see examples of the syntax highlighter in a
 
 - Modern browsers with JavaScript enabled
 - jQuery 3.6.0+ (loaded from CDN)
-- Prism.js 1.29.0+ (loaded from CDN)
+- Monaco Editor 0.45.0+ (loaded from CDN)
 - No additional dependencies required
 
 ## Extending the Language Definition
 
-To add new token types or modify existing ones, edit the `snomed-ct-language.js` file. The language definition follows Prism.js conventions:
+To add new token types or modify existing ones, edit the `snomed-monaco.js` file. The language definition follows Monaco Editor conventions:
 
 ```javascript
-Prism.languages.snomedct['new-token'] = {
-    pattern: /your-regex-pattern/,
-    alias: 'semantic-alias'
-};
+monaco.languages.setMonarchTokensProvider('snomedct', {
+    tokenizer: {
+        root: [
+            [/\b\d{9}\b/, 'concept-id'],
+            [/\|/, 'pipe'],
+            // Add new patterns here
+        ]
+    }
+});
 ```
 
 ## Performance
 
-- Prism.js core is only 2KB minified & gzipped
+- Monaco Editor is optimized for large files and expressions
 - Custom language definition adds minimal overhead
-- Supports Web Workers for parallel processing (if available)
+- Efficient tokenization and rendering
 - Optimized for real-time highlighting 

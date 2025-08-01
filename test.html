@@ -79,26 +79,47 @@
             margin: 10px 0;
             border-left: 4px solid #ff6600;
         }
+        
+        .monaco-example {
+            background: #f0fff0;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #00cc00;
+        }
     </style>
 </head>
 <body>
     <div class="test-container">
-        <h1>SNOMED CT Expression Formatter with Prism.js</h1>
-        <p>This webapp uses Prism.js for robust syntax highlighting of SNOMED CT expressions. Use the links below to test with different expressions:</p>
+        <h1>SNOMED CT Expression Formatter with Monaco Editor</h1>
+        <p>This webapp uses Monaco Editor for robust syntax highlighting and formatting of SNOMED CT expressions. Use the links below to test with different expressions:</p>
         
         <div class="feature-list">
             <h3>Features:</h3>
             <ul>
-                <li><strong>Concept IDs</strong> (9-digit numbers) - Highlighted in blue</li>
-                <li><strong>Descriptions</strong> (text between | bars) - Highlighted in black</li>
+                <li><strong>Concept IDs</strong> (9-digit numbers) - Highlighted in grey</li>
+                <li><strong>Pipes</strong> (|) - Highlighted in blue</li>
+                <li><strong>Keywords</strong> (id) - Highlighted in red</li>
                 <li><strong>Operators</strong> (:, =, <, <<, >>) - Highlighted in red</li>
-                <li><strong>Brackets</strong> ({}, [], ()) - Highlighted in gray</li>
-                <li><strong>Keywords</strong> (+id) - Highlighted in green</li>
-                <li><strong>Role Groups</strong> (@Finding, @Relationship) - Highlighted in purple</li>
-                <li><strong>Separators</strong> (commas) - Highlighted in gray</li>
+                <li><strong>Brackets</strong> ({}, [], ()) - Highlighted in red</li>
+                <li><strong>Role Groups</strong> (@Finding, @Relationship) - Highlighted in red</li>
+                <li><strong>Separators</strong> (commas) - Highlighted in red</li>
                 <li><strong>Normalization</strong> - Cleans up spacing around descriptions</li>
                 <li><strong>Indentation</strong> - Formats attribute groups with proper indentation</li>
                 <li><strong>Nested Expressions</strong> - Handles complex nested structures</li>
+            </ul>
+        </div>
+        
+        <div class="monaco-example">
+            <h3>🚀 Monaco Editor Benefits</h3>
+            <p>The new Monaco Editor implementation provides:</p>
+            <ul>
+                <li><strong>Professional Editor</strong> - Same editor used by VS Code</li>
+                <li><strong>Robust Parsing</strong> - Proper tokenization and syntax highlighting</li>
+                <li><strong>Maintainable Code</strong> - Clear separation of concerns</li>
+                <li><strong>Extensible</strong> - Easy to add new features and validation</li>
+                <li><strong>Performance</strong> - Optimized for large expressions</li>
+                <li><strong>Reliable</strong> - No more brittle regex-based parsing</li>
             </ul>
         </div>
         
@@ -132,14 +153,14 @@
                 <li>Handles complex structures with multiple levels</li>
                 <li>Maintains readability for deeply nested expressions</li>
                 <li>Adds newlines after opening parentheses</li>
-                <li>Indents nested content by 13 spaces</li>
+                <li>Indents nested content by 4 spaces</li>
             </ul>
         </div>
         
         <h2>Test Examples:</h2>
         
         <a href="index.html?expression=243796009 | Situation with explicit context | : { 246090004 | Associated finding | = [[+id (< 404684003 | Clinical finding | )@Finding]], 408731000 | Temporal context = 410511007 | Current or past (actual), 408729009 | Finding context | = 410515003 | Known present, 408732007 | Subject relationship context = [[+id (<< 444148008 | Person in family of subject | ) @Relationship]] }" class="test-link">
-            Test with Complex Expression (Indentation)
+            Test with Complex Expression (Monaco Editor)
         </a>
         
         <a href="index.html?expression=404684003 | Clinical finding |" class="test-link">
@@ -175,7 +196,7 @@
         </a>
         
         <a href="index.html?expression=243796009 |Situation with explicit context|: { 246090004|Associated finding|= [[+id (< 404684003|Clinical finding|) @Finding]], 408731000|Temporal context|= 410511007|Current or past (actual)|, 408729009|Finding context|= (243796009 |Situation with explicit context|: { 246090004|Associated finding|= [[+id (< 404684003|Clinical finding|) @Finding]], 408731000|Temporal context|= 410511007|Current or past (actual)|) }, 408732007|Subject relationship context|= [[+id (<< 444148008|Person in family of subject| ) @Relationship]] }" class="test-link">
-            Test Parentheses Formatting (13-space indentation)
+            Test Parentheses Formatting (4-space indentation)
         </a>
         
         <a href="index.html?expression=243796009 |Situation with explicit context|: { 246090004|Associated finding|= [[+id (< 404684003|Clinical finding|) @Finding]], 408731000|Temporal context|= 410511007|Current or past (actual)|, 408729009|Finding context|= (243796009 |Situation with explicit context|: { 246090004|Associated finding|= [[+id (< 404684003|Clinical finding|) @Finding]], 408731000|Temporal context|= 410511007|Current or past (actual)|) }, 408732007|Subject relationship context|= [[+id (<< 444148008|Person in family of subject| ) @Relationship]] }" class="test-link">
@@ -196,13 +217,14 @@
         
         <p>The expression parameter should be URL-encoded if it contains special characters.</p>
         
-        <h2>Benefits of Prism.js:</h2>
+        <h2>Benefits of Monaco Editor:</h2>
         <ul>
-            <li><strong>Robust parsing</strong> - Handles edge cases better than regex</li>
-            <li><strong>Extensible</strong> - Easy to add new token types</li>
-            <li><strong>Well-tested</strong> - Used by millions of websites</li>
-            <li><strong>Performance</strong> - Optimized for speed</li>
-            <li><strong>Maintainable</strong> - Clear separation of concerns</li>
+            <li><strong>Professional parsing</strong> - Robust tokenization and syntax highlighting</li>
+            <li><strong>Maintainable</strong> - Clear grammar definition and token rules</li>
+            <li><strong>Extensible</strong> - Easy to add validation and new features</li>
+            <li><strong>Performance</strong> - Optimized for large expressions</li>
+            <li><strong>Reliable</strong> - No more brittle regex-based parsing</li>
+            <li><strong>Professional</strong> - Same editor used by VS Code</li>
             <li><strong>Normalization</strong> - Automatically cleans up formatting</li>
             <li><strong>Indentation</strong> - Professional formatting for attribute groups</li>
             <li><strong>Nested Support</strong> - Handles complex nested expressions</li>

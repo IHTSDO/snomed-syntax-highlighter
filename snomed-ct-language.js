@@ -1,20 +1,14 @@
 // SNOMED CT Language Definition for Prism.js
 Prism.languages.snomedct = {
-    // Concept IDs (9-digit numbers)
-    'concept-id': {
-        pattern: /\b\d{9}\b/,
-        alias: 'number'
-    },
-    
-    // Descriptions (text between vertical bars)
-    'description': {
-        pattern: /\|[^|]*\|/,
-        alias: 'string'
-    },
-    
-    // Keywords
+    // Keywords (must come first)
     'keyword': {
-        pattern: /\+id/,
+        pattern: /\b(\+?id)\b/,
+        alias: 'keyword'
+    },
+    
+    // ID text in brackets (specific pattern)
+    'id-text': {
+        pattern: /\bid\b/,
         alias: 'keyword'
     },
     
@@ -30,15 +24,33 @@ Prism.languages.snomedct = {
         alias: 'operator'
     },
     
-    // Brackets and parentheses
-    'bracket': {
-        pattern: /[{}[\]()]/,
-        alias: 'punctuation'
-    },
-    
     // Separators (commas)
     'separator': {
         pattern: /,/,
+        alias: 'punctuation'
+    },
+    
+    // Concept IDs (9-digit numbers)
+    'concept-id': {
+        pattern: /\b\d{9}\b/,
+        alias: 'number'
+    },
+    
+    // Pipes (description delimiters)
+    'pipe': {
+        pattern: /\|/,
+        alias: 'punctuation'
+    },
+    
+    // Descriptions (text between vertical bars, including brackets within)
+    'description': {
+        pattern: /\|[^|]*\|/,
+        alias: 'string'
+    },
+    
+    // Brackets and parentheses (only outside descriptions)
+    'bracket': {
+        pattern: /[{}[\]()]/,
         alias: 'punctuation'
     },
     
