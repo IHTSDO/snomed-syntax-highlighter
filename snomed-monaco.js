@@ -128,8 +128,16 @@ require(['vs/editor/editor.main'], function() {
     function normalizeSNOMEDExpression(expression) {
         let normalized = expression;
         
-        // Normalize description terms: remove spaces after opening pipe and before closing pipe
-        normalized = normalized.replace(/\|\s+([^|]*?)\s+\|/g, '|$1|');
+        // Normalize concept descriptions using the same regex as link provider
+        // Remove spaces after first pipe and before last pipe in concept descriptions
+        normalized = normalized.replace(/\b(\d{6,18})\b(?:\s*\|([^|]*)\|)?/g, function(match, conceptId, description) {
+            if (description) {
+                // Remove spaces after first pipe and before last pipe
+                const cleanedDescription = description.replace(/^\s+|\s+$/g, '');
+                return `${conceptId}|${cleanedDescription}|`;
+            }
+            return match; // Return unchanged if no description
+        });
         
         // Format indentation for attribute groups
         normalized = formatAttributeGroups(normalized);
