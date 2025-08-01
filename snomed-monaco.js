@@ -97,12 +97,27 @@ require(['vs/editor/editor.main'], function() {
                 theme: 'snomedct-theme',
                 readOnly: true,
                 minimap: { enabled: false },
+                lineNumbers: 'off',
                 scrollBeyondLastLine: false,
                 automaticLayout: true,
                 fontSize: 14,
                 lineHeight: 20,
-                wordWrap: 'on'
+                wordWrap: 'on',
+                padding: { top: 0, bottom: 5, left: 0, right: 0 },
             });
+            
+            // Adjust height based on content
+            setTimeout(() => {
+                const lineCount = editor.getModel().getLineCount();
+                const minHeight = 20; // Minimum height in pixels
+                const maxHeight = 800; // Maximum height in pixels
+                const lineHeight = 20; // Line height in pixels
+                const padding = 2; // Extra padding for borders, etc.
+                
+                const calculatedHeight = Math.max(minHeight, Math.min(maxHeight, (lineCount * lineHeight) + padding));
+                document.getElementById('expression-container').style.height = calculatedHeight + 'px';
+                editor.layout();
+            }, 100);
             
         } catch (error) {
             $('#expression-container').html('<div class="error">Error parsing expression: ' + error.message + '</div>');
