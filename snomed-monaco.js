@@ -16,8 +16,8 @@ require(['vs/editor/editor.main'], function() {
         // Tokenizer rules
         tokenizer: {
             root: [
-                // Concept IDs (9-digit numbers)
-                [/\b\d{9}\b/, 'concept-id'],
+                // Concept IDs (6-18 digit numbers)
+                [/\b\d{6,18}\b/, 'concept-id'],
                 
                 // Pipes
                 [/\|/, 'pipe'],
