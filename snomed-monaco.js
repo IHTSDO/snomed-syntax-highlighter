@@ -137,6 +137,10 @@ require(['vs/editor/editor.main'], function() {
                 wordWrap: 'on',
                 padding: { top: 0, bottom: 5, left: 0, right: 0 },
                 links: true,
+                renderLineHighlight: 'none',
+                glyphMargin: false,
+                folding: false,
+                lineDecorationsWidth: 0
             });
             
             // Adjust height based on content
