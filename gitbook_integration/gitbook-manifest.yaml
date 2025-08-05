@@ -1,0 +1,14 @@
+name: snomed-syntax-highlighter
+title: snomed-syntax-highlighter
+script: src/index.tsx
+description: ''
+scopes:
+  - space:content:read
+  - space:content:write
+blocks:
+  - id: snomed-syntax-highlighter
+    title: snomed-syntax-highlighter
+    description: Highlight SNOMED CT expressions
+organization: h8Z6qGxuQrzM9vbx5bPT
+visibility: private
+secrets: {}
