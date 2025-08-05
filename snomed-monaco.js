@@ -136,18 +136,23 @@ require(['vs/editor/editor.main'], function() {
                 lineHeight: 20,
                 wordWrap: 'on',
                 padding: { top: 0, bottom: 5, left: 0, right: 0 },
-                links: true
+                links: true,
             });
             
             // Adjust height based on content
             setTimeout(() => {
                 const lineCount = editor.getModel().getLineCount();
-                const minHeight = 20; // Minimum height in pixels
+                const minHeight = 10; // Minimum height in pixels
                 const maxHeight = 800; // Maximum height in pixels
                 const lineHeight = 20; // Line height in pixels
-                const padding = 2; // Extra padding for borders, etc.
-                
-                const calculatedHeight = Math.max(minHeight, Math.min(maxHeight, (lineCount * lineHeight) + padding));
+                const padding = 5; // Extra padding for borders, etc.
+
+                let lineCountPlus = lineCount;
+                if (lineCountPlus > 1) {
+                    lineCountPlus++;
+                }
+
+                const calculatedHeight = Math.max(minHeight, Math.min(maxHeight, (lineCountPlus * lineHeight) + padding));
                 document.getElementById('expression-container').style.height = calculatedHeight + 'px';
                 editor.layout();
             }, 100);
