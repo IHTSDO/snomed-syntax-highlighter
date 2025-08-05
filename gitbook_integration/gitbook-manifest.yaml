@@ -9,6 +9,7 @@ blocks:
   - id: snomed-syntax-highlighter
     title: snomed-syntax-highlighter
     description: Highlight SNOMED CT expressions
+# Organization ID for Snomed International
 organization: h8Z6qGxuQrzM9vbx5bPT
 visibility: private
 secrets: {}
