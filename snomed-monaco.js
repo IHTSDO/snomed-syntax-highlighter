@@ -140,7 +140,7 @@ require(['vs/editor/editor.main'], function() {
                 renderLineHighlight: 'none',
                 glyphMargin: false,
                 folding: false,
-                lineDecorationsWidth: 0
+                lineDecorationsWidth: 10
             });
             
             // Adjust height based on content
