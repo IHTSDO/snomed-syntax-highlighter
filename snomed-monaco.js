@@ -151,12 +151,7 @@ require(['vs/editor/editor.main'], function() {
                 const lineHeight = 20; // Line height in pixels
                 const padding = 5; // Extra padding for borders, etc.
 
-                let lineCountPlus = lineCount;
-                if (lineCountPlus > 1) {
-                    lineCountPlus++;
-                }
-
-                const calculatedHeight = Math.max(minHeight, Math.min(maxHeight, (lineCountPlus * lineHeight) + padding));
+                const calculatedHeight = Math.max(minHeight, Math.min(maxHeight, (lineCount * lineHeight) + padding));
                 document.getElementById('expression-container').style.height = calculatedHeight + 'px';
                 editor.layout();
             }, 100);
