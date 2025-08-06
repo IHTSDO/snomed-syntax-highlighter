@@ -157,6 +157,27 @@ require(['vs/editor/editor.main'], function() {
                 editor.layout();
             }, 100);
             
+            // Copy button functionality
+            document.getElementById('copy-button').addEventListener('click', function() {
+                const expressionText = editor.getValue();
+                navigator.clipboard.writeText(expressionText).then(function() {
+                    // Temporarily change button text to show success
+                    const button = document.getElementById('copy-button');
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#d4edda';
+                    button.style.color = '#155724';
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#f8f9fa';
+                        button.style.color = '#666';
+                    }, 1000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                });
+            });
+            
         } catch (error) {
             $('#expression-container').html('<div class="error">Error parsing expression: ' + error.message + '</div>');
         }
