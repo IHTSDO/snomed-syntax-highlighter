@@ -29,7 +29,7 @@ require(['vs/editor/editor.main'], function() {
                 [/@\w+/, 'role-group'],
                 
                 // Operators
-                [/[=:<>]/, 'operator'],
+                [/[=:<>*^!]/, 'operator'],
                 
                 // Brackets
                 [/[{}[\]()]/, 'bracket'],
