@@ -18,9 +18,10 @@
         .expression-container {
             min-height: 20px;
             max-height: 146px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            background: grey;            
+            border: 1px solid #dae8f0;
+            border-radius: 6px;
+            background: white;
+            padding: 8px;
         }
         
         .error {
@@ -34,6 +35,12 @@
         /* Monaco Editor customizations */
         .monaco-editor {
             font-family: 'Open Sans', sans-serif !important;
+        }
+        
+        /* Ensure Monaco editor respects container border radius */
+        .expression-container .monaco-editor {
+            border-radius: 6px !important;
+            overflow: hidden !important;
         }
         
         /* Remove underlines from hyperlinks */
