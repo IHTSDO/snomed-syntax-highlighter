@@ -97,7 +97,8 @@ require(['vs/editor/editor.main'], function() {
                 
                 links.push({
                     range: new monaco.Range(startPos.lineNumber, startPos.column, endPos.lineNumber, endPos.column),
-                    url: url
+                    url: url,
+                    tooltip: 'Open in Browser'
                 });
             }
             
