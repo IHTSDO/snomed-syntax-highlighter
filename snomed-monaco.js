@@ -288,6 +288,7 @@ require(['vs/editor/editor.main'], function() {
         let current = '';
         let parenCount = 0;
         let braceCount = 0;
+        let inDescription = false;
         
         for (let i = 0; i < content.length; i++) {
             const char = content[i];
@@ -300,8 +301,10 @@ require(['vs/editor/editor.main'], function() {
                 braceCount++;
             } else if (char === '}') {
                 braceCount--;
-            } else if (char === ',' && parenCount === 0 && braceCount === 0) {
-                // Top-level comma found
+            } else if (char === '|') {
+                inDescription = !inDescription; // Toggle description state
+            } else if (char === ',' && parenCount === 0 && braceCount === 0 && !inDescription) {
+                // Top-level comma found (not inside parentheses, braces, or descriptions)
                 result.push(current);
                 current = '';
                 continue;
