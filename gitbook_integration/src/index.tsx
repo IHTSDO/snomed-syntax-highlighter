@@ -90,11 +90,11 @@ const exampleBlock = createComponent<
     if (isEditable) {
       return (
         <block>
-          <text>You are in edit mode. Put the SNOMED ECL or Expression in this box.</text>
-            <codeblock 
-              state="content" 
-              content={content || ""} 
-              onContentChange={{ 
+          <text style="italic">You are in edit mode. Edit the Expression in this box.</text>
+            <codeblock
+              state="content"
+              content={content || ""}
+              onContentChange={{
                 action: '@editor.node.updateProps',
                 props: {
                   lines: lines,
@@ -102,7 +102,7 @@ const exampleBlock = createComponent<
                 }
               }}
             />
-          <text>This is how it will look:</text>
+            <text style="italic">This is how it will look:</text>
           <webframe
             source={{ url: expressionUrl }}
             aspectRatio={710/(23 + (20 * lines))}
