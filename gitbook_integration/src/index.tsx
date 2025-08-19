@@ -48,8 +48,8 @@ const exampleBlock = createComponent<
         console.log("Increase size content", element.state.content);
         let lines = element.state.lines || 1;
         lines = lines + 1;
-        if (lines > 10) {
-          lines = 10;
+        if (lines > 15) {
+          lines = 15;
         }
         return {
           action: '@editor.node.updateProps',
@@ -84,6 +84,28 @@ const exampleBlock = createComponent<
     let lines = element.state.lines;
     console.log("render lines ", lines);
     const isEditable = element.context.editable;
+    let linesGuess = 1;
+    
+    // Process content to add newlines after "{" and "}" characters, with exceptions
+    let processedContent = content;
+    if (content) {
+      // Add newline after each "{" character if there isn't one already, and remove trailing whitespace
+      processedContent = content.replace(/\{\s*/g, '{\n');
+      
+      // Add newline before "}" characters, but preserve "}, {" and "}," sequences
+      processedContent = processedContent.replace(/(?<!,\s*)\}\s*(?!,|\s*,)/g, '\n}');
+      
+      console.log("Processed content:", processedContent);
+    }
+    
+    // Calculate approximate number of lines based on newline characters
+    if (processedContent && lines == 1) {
+      linesGuess = (processedContent.match(/\n/g) || []).length + 1;
+      console.log("linesGuess  ", linesGuess);
+      
+      lines = linesGuess;
+      element.state.lines = lines;
+    }
     
     const expressionUrl = `https://ihtsdo.github.io/snomed-syntax-highlighter/?expression=${encodeURIComponent(content || '')}`;
 
