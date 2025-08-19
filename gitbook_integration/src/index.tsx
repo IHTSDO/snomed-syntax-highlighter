@@ -6,9 +6,9 @@ import {
 } from "@gitbook/runtime";
 
 type IntegrationContext = {} & RuntimeContext;
-type IntegrationBlockProps = { content?: string, lines?: number };
-type IntegrationBlockState = { content?: string, lines?: number };
-type IntegrationAction = { action: 'click' } | { action: 'contentChange' } | { action: 'increaseSize' };
+  type IntegrationBlockProps = { content?: string, lines?: number };
+  type IntegrationBlockState = { content?: string, lines?: number, processed?: boolean };
+type IntegrationAction = { action: 'click' } | { action: 'contentChange' } | { action: 'contentChangeLocal' } | { action: 'increaseSize' } | { action: 'keepSize' } | { action: 'decreaseSize' };
 
 const handleFetchEvent: FetchEventCallback<IntegrationContext> = async (
   request,
@@ -42,10 +42,51 @@ const exampleBlock = createComponent<
   },
   action: async (element, action, context) => {
     switch (action.action) {
+      case "contentChangeLocal":
+        console.log("Change content local", element);
+        if (element.state.processed) {
+          return element;
+        }
+
+        // Process content to add newlines after "{" and "}" characters, with exceptions
+        let content = element.state.content;
+        let processedContent = content;
+        let linesGuess = 1;
+        if (content) {
+          // Add newline after each "{" character if there isn't one already, and remove trailing whitespace
+          processedContent = content.replace(/\{\s*/g, '{\n');
+          
+          // Add newline before "}" characters, but preserve "}, {" and "}," sequences
+          processedContent = processedContent.replace(/(?<!,\s*)\}\s*(?!,|\s*,)/g, '\n}');
+          
+          // Remove trailing newline if the last character is "}"
+          processedContent = processedContent.replace(/\n\s*$/, '');
+          
+          console.log("Processed content:", processedContent);
+          linesGuess = (processedContent.match(/\n/g) || []).length + 1;
+          console.log("linesGuess  ", linesGuess);
+        }
+
+        return {
+          action: '@editor.node.updateProps',
+          props: {
+            lines: linesGuess,
+            content: content,
+            processed: true
+          }
+        }
+      case "keepSize":
+        console.log("Keep size lines", element.state.lines);
+        let linesKeep = element.state.lines || 1;
+        return {
+          action: '@editor.node.updateProps',
+          props: {
+            lines: linesKeep,
+            content: element.state.content
+          }
+        }
       case "increaseSize":
         console.log("Increase size", element);
-        console.log("Increase size lines", element.state.lines);
-        console.log("Increase size content", element.state.content);
         let lines = element.state.lines || 1;
         lines = lines + 1;
         if (lines > 15) {
@@ -60,8 +101,6 @@ const exampleBlock = createComponent<
         }
       case "decreaseSize":
         console.log("Decrease size", element);
-        console.log("Decrease size lines", element.state.lines);
-        console.log("Decrease size content", element.state.content);
         let linesB = element.state.lines || 1;
         linesB = linesB -1;
         if (linesB < 1) {
@@ -85,27 +124,9 @@ const exampleBlock = createComponent<
     console.log("render lines ", lines);
     const isEditable = element.context.editable;
     let linesGuess = 1;
+    let guessedLines = false;
     
-    // Process content to add newlines after "{" and "}" characters, with exceptions
-    let processedContent = content;
-    if (content) {
-      // Add newline after each "{" character if there isn't one already, and remove trailing whitespace
-      processedContent = content.replace(/\{\s*/g, '{\n');
-      
-      // Add newline before "}" characters, but preserve "}, {" and "}," sequences
-      processedContent = processedContent.replace(/(?<!,\s*)\}\s*(?!,|\s*,)/g, '\n}');
-      
-      console.log("Processed content:", processedContent);
-    }
-    
-    // Calculate approximate number of lines based on newline characters
-    if (processedContent && lines == 1) {
-      linesGuess = (processedContent.match(/\n/g) || []).length + 1;
-      console.log("linesGuess  ", linesGuess);
-      
-      lines = linesGuess;
-      element.state.lines = lines;
-    }
+
     
     const expressionUrl = `https://ihtsdo.github.io/snomed-syntax-highlighter/?expression=${encodeURIComponent(content || '')}`;
 
@@ -117,7 +138,7 @@ const exampleBlock = createComponent<
               state="content"
               content={content || ""}
               onContentChange={{
-                action: '@editor.node.updateProps',
+                action: 'contentChangeLocal',
                 props: {
                   lines: lines,
                   content: element.dynamicState('content')
