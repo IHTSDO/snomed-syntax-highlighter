@@ -61,6 +61,7 @@ const exampleBlock = createComponent<
           
           // Remove trailing newline if the last character is "}"
           processedContent = processedContent.replace(/\n\s*$/, '');
+          processedContent = processedContent.replace(/\n+/g, '\n');
           
           console.log("Processed content:", processedContent);
           linesGuess = (processedContent.match(/\n/g) || []).length + 1;
